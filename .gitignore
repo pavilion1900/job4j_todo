@@ -1,0 +1,11 @@
+*.iml
+target
+.idea/
+.gradle/
+build/
+*.db
+*.log
+*.pdf
+*.gz
+/testdb.mv.db
+/testdb.trace.db
