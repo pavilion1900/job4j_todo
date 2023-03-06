@@ -1,9 +1,10 @@
-package ru.job4j.todo.service;
+package ru.job4j.todo.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.repository.TaskRepository;
+import ru.job4j.todo.service.TaskService;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public boolean replace(Task task) {
+    public Task replace(Task task) {
         return taskRepository.replace(task);
     }
 

@@ -15,9 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepository {
 
-    private static final String UPDATE_TASK =
-            "update Task t set t.description = :description, t.done =:done where t.id = :id";
-
     private static final String DELETE_TASK = "delete from Task t where t.id = :id";
 
     private static final String FIND_ALL_TASKS = "from Task t order by t.id";
@@ -42,23 +39,18 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public boolean replace(Task task) {
+    public Task replace(Task task) {
         Session session = sf.openSession();
-        int result = 0;
         try {
             session.beginTransaction();
-            result = session.createQuery(UPDATE_TASK)
-                    .setParameter("description", task.getDescription())
-                    .setParameter("done", task.isDone())
-                    .setParameter("id", task.getId())
-                    .executeUpdate();
+            session.saveOrUpdate(task);
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
             session.close();
         }
-        return result > 0;
+        return task;
     }
 
     @Override

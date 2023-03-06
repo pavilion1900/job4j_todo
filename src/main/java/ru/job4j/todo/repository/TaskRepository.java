@@ -8,7 +8,7 @@ public interface TaskRepository {
 
     Task add(Task task);
 
-    boolean replace(Task task);
+    Task replace(Task task);
 
     boolean delete(int id);
 

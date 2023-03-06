@@ -8,7 +8,7 @@ public interface TaskService {
 
     Task add(Task task);
 
-    boolean replace(Task task);
+    Task replace(Task task);
 
     boolean delete(int id);
 
