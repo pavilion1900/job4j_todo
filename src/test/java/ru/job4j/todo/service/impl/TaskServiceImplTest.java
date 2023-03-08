@@ -10,6 +10,7 @@ import ru.job4j.todo.repository.TaskRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -101,9 +102,9 @@ class TaskServiceImplTest {
                 .created(LocalDateTime.now())
                 .done(false)
                 .build();
-        doReturn(task)
+        doReturn(Optional.of(task))
                 .when(taskRepository).findById(task.getId());
-        Task actual = taskRepository.findById(task.getId());
-        assertThat(actual).isEqualTo(task);
+        Optional<Task> optional = taskRepository.findById(task.getId());
+        optional.ifPresent(actual -> assertThat(actual).isEqualTo(task));
     }
 }

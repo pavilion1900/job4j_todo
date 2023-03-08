@@ -10,16 +10,21 @@ import ru.job4j.todo.repository.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
 public class TaskRepositoryImpl implements TaskRepository {
 
-    private static final String DELETE_TASK = "delete from Task t where t.id = :id";
+    private static final String DELETE_TASK = "DELETE FROM Task t WHERE t.id = :id";
 
-    private static final String FIND_ALL_TASKS = "from Task t order by t.id";
+    private static final String FIND_ALL_TASKS = "FROM Task t ORDER BY t.id";
 
-    private static final String FIND_BY_ID_TASK = "from Task t where t.id = :id";
+    private static final String FIND_ALL_FINISHED_TASKS = "FROM Task t WHERE t.done = true ORDER BY t.id";
+
+    private static final String FIND_ALL_NEW_TASKS = "FROM Task t WHERE t.done = false ORDER BY t.id";
+
+    private static final String FIND_BY_ID_TASK = "FROM Task t WHERE t.id = :id";
 
     private final SessionFactory sf;
 
@@ -89,7 +94,41 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public Task findById(int id) {
+    public List<Task> findAllFinishedTasks() {
+        Session session = sf.openSession();
+        List<Task> tasks = new ArrayList<>();
+        try {
+            session.beginTransaction();
+            Query<Task> query = session.createQuery(FIND_ALL_FINISHED_TASKS, Task.class);
+            tasks = query.getResultList();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return tasks;
+    }
+
+    @Override
+    public List<Task> findAllNewTasks() {
+        Session session = sf.openSession();
+        List<Task> tasks = new ArrayList<>();
+        try {
+            session.beginTransaction();
+            Query<Task> query = session.createQuery(FIND_ALL_NEW_TASKS, Task.class);
+            tasks = query.getResultList();
+            session.getTransaction().commit();
+        } catch (Exception e) {
+            session.getTransaction().rollback();
+        } finally {
+            session.close();
+        }
+        return tasks;
+    }
+
+    @Override
+    public Optional<Task> findById(int id) {
         Session session = sf.openSession();
         Task result = new Task();
         try {
@@ -103,6 +142,6 @@ public class TaskRepositoryImpl implements TaskRepository {
         } finally {
             session.close();
         }
-        return result;
+        return Optional.ofNullable(result);
     }
 }

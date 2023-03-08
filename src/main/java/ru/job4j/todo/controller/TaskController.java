@@ -7,85 +7,78 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.Task;
 import ru.job4j.todo.service.TaskService;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Controller
 @RequiredArgsConstructor
+@RequestMapping("tasks")
 public class TaskController {
 
     private final TaskService taskService;
 
-    @GetMapping("/tasks")
+    @GetMapping()
     public String findAll(Model model) {
         model.addAttribute("tasks", taskService.findAll());
-        return "tasks";
+        return "task/tasks";
     }
 
-    @GetMapping("/finishedTasks")
+    @GetMapping("/finished")
     public String findAllFinishedTasks(Model model) {
-        List<Task> finishedTasks = taskService.findAll().stream()
-                .filter(Task::isDone)
-                .collect(toList());
-        model.addAttribute("finishedTasks", finishedTasks);
-        return "finishedTasks";
+        model.addAttribute("finishedTasks", taskService.findAllFinishedTasks());
+        return "task/finished";
     }
 
-    @GetMapping("/newTasks")
+    @GetMapping("/new")
     public String findAllNewTasks(Model model) {
-        List<Task> newTasks = taskService.findAll().stream()
-                .filter(task -> !task.isDone())
-                .collect(toList());
-        model.addAttribute("newTasks", newTasks);
-        return "newTasks";
+        model.addAttribute("newTasks", taskService.findAllNewTasks());
+        return "task/new";
     }
 
-    @GetMapping("/formAddTask")
+    @GetMapping("/formAdd")
     public String addTask() {
-        return "addTask";
+        return "task/add";
     }
 
-    @GetMapping("/formShowDescription/{taskId}")
+    @GetMapping("/formShowDescription/{id}")
     public String formShowDescription(Model model,
-                                      @PathVariable("taskId") Integer id) {
+                                      @PathVariable int id) {
         model.addAttribute("task", taskService.findById(id));
-        return "showDescription";
+        return "task/showDescription";
     }
 
-    @GetMapping("/formUpdateTask/{taskId}")
-    public String formUpdateCandidate(Model model,
-                                      @PathVariable("taskId") Integer id) {
+    @GetMapping("/formUpdate/{id}")
+    public String formUpdateTask(Model model,
+                                 @PathVariable int id) {
         model.addAttribute("task", taskService.findById(id));
-        return "updateTask";
+        return "task/update";
     }
 
-    @GetMapping("/finishTask/{taskId}")
-    public String finishTask(@PathVariable("taskId") Integer id) {
+    @GetMapping("/finish/{id}")
+    public String finishTask(@PathVariable int id) {
         Task task = taskService.findById(id);
         task.setDone(true);
         taskService.replace(task);
         return "redirect:/tasks";
     }
 
-    @GetMapping("/deleteTask/{taskId}")
-    public String deleteTask(@PathVariable("taskId") Integer id) {
+    @GetMapping("/delete/{id}")
+    public String deleteTask(@PathVariable int id) {
         taskService.delete(id);
         return "redirect:/tasks";
     }
 
-    @PostMapping("/createTask")
+    @PostMapping("/create")
     public String createTask(@ModelAttribute Task task) {
         task.setCreated(LocalDateTime.now());
         taskService.add(task);
         return "redirect:/tasks";
     }
 
-    @PostMapping("/updateTask")
+    @PostMapping("/update")
     public String updateTask(@ModelAttribute Task task) {
         taskService.replace(task);
         return "redirect:/tasks";

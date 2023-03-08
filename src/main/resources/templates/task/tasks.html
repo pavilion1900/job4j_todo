@@ -32,8 +32,8 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" th:href="@{/tasks}">Все</a>
-                <a class="nav-item nav-link" th:href="@{/finishedTasks}">Выполненные</a>
-                <a class="nav-item nav-link" th:href="@{/newTasks}">Новые</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/finished}">Выполненные</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые</a>
             </div>
         </div>
     </nav>
@@ -51,7 +51,7 @@
             <tr th:each="task: ${tasks}">
                 <td th:text="${task.id}"/>
                 <td>
-                    <a th:href="@{|/formShowDescription/${task.id}|}">
+                    <a th:href="@{|/tasks/formShowDescription/${task.id}|}">
                         <p th:text="${task.description}"></p>
                     </a>
                 </td>
@@ -60,7 +60,7 @@
             </tr>
             </tbody>
         </table>
-        <form th:action="@{/formAddTask}" method="get">
+        <form th:action="@{/tasks/formAdd}" method="get">
             <button type="submit" class="btn btn-primary">Добавить задание</button>
         </form>
     </div>

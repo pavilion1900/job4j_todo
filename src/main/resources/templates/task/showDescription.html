@@ -25,19 +25,21 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Редактирование данных о задаче.
+                Подробное описание задачи
             </div>
             <div class="card-body">
-                <form th:action="@{/updateTask}" method="post" th:object="${task}" enctype="multipart/form-data">
-                    <input type="hidden" name="id" th:field="*{id}"/>
-                    <div class="form-group">
-                        <label for="description">Description</label>
-                        <input type="text" class="form-control" name="description" id="description"
-                        th:field="*{description}"/>
-                    </div>
-                    <input type="hidden" name="done" th:field="*{done}"/>
-                    <button type="submit" class="btn btn-primary">Сохранить</button>
-                </form>
+                <h6>Id</h6>
+                <p th:text="${task.id}"></p>
+                <h6>Description</h6>
+                <p th:text="${task.description}"></p>
+                <h6>Created</h6>
+                <p th:text="${task.created}"></p>
+                <h6>Done</h6>
+                <p th:text="${task.done}"></p>
+                <br/>
+                <a th:href="@{|/tasks/finish/${task.id}|}" class="btn btn-primary">Выполнено</a>
+                <a th:href="@{|/tasks/formUpdate/${task.id}|}" class="btn btn-primary">Отредактировать</a>
+                <a th:href="@{|/tasks/delete/${task.id}|}" class="btn btn-primary">Удалить</a>
             </div>
         </div>
     </div>

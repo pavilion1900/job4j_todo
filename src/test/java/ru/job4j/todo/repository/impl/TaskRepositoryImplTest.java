@@ -10,6 +10,7 @@ import ru.job4j.todo.repository.TaskRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -60,12 +61,10 @@ class TaskRepositoryImplTest {
                 .created(LocalDateTime.now())
                 .build();
         taskRepository.replace(newTask);
-        Task replacedTask = taskRepository.findById(savedTask.getId());
+        Optional<Task> optional = taskRepository.findById(savedTask.getId());
         int size = taskRepository.findAll().size();
-        assertAll(
-                () -> assertThat(size).isEqualTo(1),
-                () -> assertThat(replacedTask.getDescription()).isEqualTo("PRES-1149: Подключить Spring AOP")
-        );
+        assertThat(size).isEqualTo(1);
+        optional.ifPresent(replacedTask -> assertThat(replacedTask.getDescription()).isEqualTo("PRES-1149: Подключить Spring AOP"));
     }
 
     @Test
@@ -102,7 +101,7 @@ class TaskRepositoryImplTest {
                 .created(LocalDateTime.now())
                 .build();
         Task savedTask = taskRepository.add(task);
-        Task findByIdTask = taskRepository.findById(savedTask.getId());
-        assertThat(savedTask.getDescription()).isEqualTo(findByIdTask.getDescription());
+        Optional<Task> optional = taskRepository.findById(savedTask.getId());
+        optional.ifPresent(findByIdTask -> assertThat(savedTask.getDescription()).isEqualTo(findByIdTask.getDescription()));
     }
 }

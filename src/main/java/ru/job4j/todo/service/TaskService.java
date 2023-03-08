@@ -14,5 +14,9 @@ public interface TaskService {
 
     List<Task> findAll();
 
+    List<Task> findAllFinishedTasks();
+
+    List<Task> findAllNewTasks();
+
     Task findById(int id);
 }
