@@ -20,9 +20,7 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     private static final String FIND_ALL_TASKS = "FROM Task t ORDER BY t.id";
 
-    private static final String FIND_ALL_FINISHED_TASKS = "FROM Task t WHERE t.done = true ORDER BY t.id";
-
-    private static final String FIND_ALL_NEW_TASKS = "FROM Task t WHERE t.done = false ORDER BY t.id";
+    private static final String FIND_ALL_BY_CONDITION_TASKS = "FROM Task t WHERE t.done = :done ORDER BY t.id";
 
     private static final String FIND_BY_ID_TASK = "FROM Task t WHERE t.id = :id";
 
@@ -94,29 +92,13 @@ public class TaskRepositoryImpl implements TaskRepository {
     }
 
     @Override
-    public List<Task> findAllFinishedTasks() {
+    public List<Task> findAll(boolean done) {
         Session session = sf.openSession();
         List<Task> tasks = new ArrayList<>();
         try {
             session.beginTransaction();
-            Query<Task> query = session.createQuery(FIND_ALL_FINISHED_TASKS, Task.class);
-            tasks = query.getResultList();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-        } finally {
-            session.close();
-        }
-        return tasks;
-    }
-
-    @Override
-    public List<Task> findAllNewTasks() {
-        Session session = sf.openSession();
-        List<Task> tasks = new ArrayList<>();
-        try {
-            session.beginTransaction();
-            Query<Task> query = session.createQuery(FIND_ALL_NEW_TASKS, Task.class);
+            Query<Task> query = session.createQuery(FIND_ALL_BY_CONDITION_TASKS, Task.class);
+            query.setParameter("done", done);
             tasks = query.getResultList();
             session.getTransaction().commit();
         } catch (Exception e) {

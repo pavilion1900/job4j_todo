@@ -37,12 +37,12 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<Task> findAllFinishedTasks() {
-        return taskRepository.findAllFinishedTasks();
+        return taskRepository.findAll(Boolean.TRUE);
     }
 
     @Override
     public List<Task> findAllNewTasks() {
-        return taskRepository.findAllNewTasks();
+        return taskRepository.findAll(Boolean.FALSE);
     }
 
     @Override
