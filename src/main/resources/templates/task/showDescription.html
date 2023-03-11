@@ -22,10 +22,33 @@
 </head>
 <body>
 <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand">TODO list</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link" th:href="@{/tasks}">Все</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/finished}">Выполненные</a>
+                <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые</a>
+                <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
+                <a class="nav-item nav-link" th:if="${user.login == 'Гость'}" th:href="@{/users/loginPage}">
+                    <span th:text="${user.login}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.login != 'Гость'}" th:href="@{/users/logout}">
+                    <span th:text="${user.login}"></span>
+                    <span> | Выйти</span>
+                </a>
+            </div>
+        </div>
+    </nav>
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Подробное описание задачи
+                <p>Подробное описание задачи</p>
             </div>
             <div class="card-body">
                 <h6>Id</h6>

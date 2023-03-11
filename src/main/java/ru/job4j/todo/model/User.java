@@ -12,7 +12,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -20,16 +19,16 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")
 @Builder
 @Entity
-@Table(name = "tasks")
-public class Task implements Serializable {
+@Table(name = "todo_user")
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String description;
+    private String name;
 
-    private LocalDateTime created;
+    private String login;
 
-    private boolean done;
+    private String password;
 }

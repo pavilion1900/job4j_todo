@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.job4j.todo.model.Task;
+import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.TaskService;
+import ru.job4j.todo.util.SessionUtil;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 @Controller
@@ -21,19 +24,28 @@ public class TaskController {
     private final TaskService taskService;
 
     @GetMapping()
-    public String findAll(Model model) {
+    public String findAll(Model model,
+                          HttpSession session) {
+        User user = SessionUtil.checkUser(session);
+        model.addAttribute("user", user);
         model.addAttribute("tasks", taskService.findAll());
         return "task/tasks";
     }
 
     @GetMapping("/finished")
-    public String findAllFinishedTasks(Model model) {
+    public String findAllFinishedTasks(Model model,
+                                       HttpSession session) {
+        User user = SessionUtil.checkUser(session);
+        model.addAttribute("user", user);
         model.addAttribute("finishedTasks", taskService.findAllFinishedTasks());
         return "task/finished";
     }
 
     @GetMapping("/new")
-    public String findAllNewTasks(Model model) {
+    public String findAllNewTasks(Model model,
+                                  HttpSession session) {
+        User user = SessionUtil.checkUser(session);
+        model.addAttribute("user", user);
         model.addAttribute("newTasks", taskService.findAllNewTasks());
         return "task/new";
     }
@@ -45,14 +57,20 @@ public class TaskController {
 
     @GetMapping("/formShowDescription/{id}")
     public String formShowDescription(Model model,
-                                      @PathVariable int id) {
+                                      @PathVariable int id,
+                                      HttpSession session) {
+        User user = SessionUtil.checkUser(session);
+        model.addAttribute("user", user);
         model.addAttribute("task", taskService.findById(id));
         return "task/showDescription";
     }
 
     @GetMapping("/formUpdate/{id}")
     public String formUpdateTask(Model model,
-                                 @PathVariable int id) {
+                                 @PathVariable int id,
+                                 HttpSession session) {
+        User user = SessionUtil.checkUser(session);
+        model.addAttribute("user", user);
         model.addAttribute("task", taskService.findById(id));
         return "task/update";
     }

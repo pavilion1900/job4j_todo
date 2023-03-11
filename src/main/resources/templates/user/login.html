@@ -1,5 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,12 +17,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <title>TODO list</title>
 </head>
 <body>
-<div class="container">
+<div class="container pt-3">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand">TODO list</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
@@ -31,10 +30,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link" th:href="@{/tasks}">Все</a>
-                <a class="nav-item nav-link" th:href="@{/tasks/finished}">Выполненные</a>
-                <a class="nav-item nav-link" th:href="@{/tasks/new}">Новые</a>
-                <a class="nav-item nav-link" th:href="@{/users}">Пользователи</a>
                 <a class="nav-item nav-link" th:if="${user.login == 'Гость'}" th:href="@{/users/loginPage}">
                     <span th:text="${user.login}"></span>
                     <span> | Войти</span>
@@ -43,35 +38,32 @@
                     <span th:text="${user.login}"></span>
                     <span> | Выйти</span>
                 </a>
+                <a class="nav-item nav-link" th:href="@{/users/formAddUser}">Зарегистрировать пользователя</a>
             </div>
         </div>
     </nav>
     <div class="row">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Описание задачи</th>
-                <th scope="col">Дата создания задачи</th>
-                <th scope="col">Состояние</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="task: ${tasks}">
-                <td th:text="${task.id}"/>
-                <td>
-                    <a th:href="@{|/tasks/formShowDescription/${task.id}|}">
-                        <p th:text="${task.description}"></p>
-                    </a>
-                </td>
-                <td th:text="${task.created}"/>
-                <td th:text="${task.done}"/>
-            </tr>
-            </tbody>
-        </table>
-        <form th:action="@{/tasks/formAdd}" method="get">
-            <button type="submit" class="btn btn-primary">Добавить задание</button>
-        </form>
+        <div class="card" style="width: 100%">
+            <div class="card-header">
+                Авторизация
+            </div>
+            <div class="card-body">
+                <div th:if="${fail}" class="alert alert-danger" role="alert">
+                    Логин или пароль введены не верно!
+                </div>
+                <form th:action="@{/users/login}" method="post">
+                    <div class="form-group">
+                        <label>Логин</label>
+                        <input type="text" class="form-control" name="login">
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="text" class="form-control" name="password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Войти</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 </body>
