@@ -34,9 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
             session.save(user);
             session.getTransaction().commit();
-            if (user != null) {
-                return Optional.of(user);
-            }
+            return Optional.of(user);
         } catch (Exception e) {
             session.getTransaction().rollback();
         } finally {
