@@ -1,6 +1,7 @@
 package ru.job4j.todo.repository.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.repository.CrudRepository;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
@@ -31,8 +33,9 @@ public class UserRepositoryImpl implements UserRepository {
             crudRepository.run(session -> session.persist(user));
             return Optional.of(user);
         } catch (Exception e) {
-            return Optional.empty();
+            log.error(e.getMessage(), e);
         }
+        return Optional.empty();
     }
 
     @Override
@@ -50,8 +53,9 @@ public class UserRepositoryImpl implements UserRepository {
             );
             return true;
         } catch (Exception e) {
-            return false;
+            log.error(e.getMessage(), e);
         }
+        return false;
     }
 
     @Override
